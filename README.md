@@ -68,3 +68,9 @@ To access the H2 console and view or interact with the database:
 All methods in the `TaskController` and `TaskService` classes have been tested using **JUnit 5** to ensure proper functionality. The tests cover all major operations such as creating, retrieving, updating, and deleting tasks.
 
 Additionally, there is a **DB initializer** included in the project. This initializer will populate the H2 database with sample data when you run the application, allowing you to quickly test the application without needing to manually input data.
+
+
+## improvement
+
+- Uploading Deleted Tasks: Deleted tasks can be stored and uploaded for future reference or as part of user achievements. This feature allows you to track and manage completed tasks, even if they have been removed from the main task list.
+- Index Page: The current index page is empty by default, providing you with the flexibility to design and implement a custom landing page.
