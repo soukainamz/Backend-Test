@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Task List</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .completed-task {
+      background-color: #d4edda; /* Light green color for completed tasks */
+    }
+    /* Make the filter inputs smaller */
+    .filter-input {
+      max-width: 200px;
+      width: 100%;
+    }
+    .filter-section {
+      display: flex;
+      justify-content: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .filter-label {
+      margin-right: 0.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="container mt-4">
+
+<h1 class="text-center mb-4">Tasks for User</h1>
+
+<!--
+<div class="mb-4">
+  <p><strong>User ID:</strong> <span th:text="${user_info.id}"></span></p>
+  <p><strong>Username:</strong> <span th:text="${user_info.username}"></span></p>
+  <p><strong>Role:</strong> <span th:text="${user_info.role}"></span></p>
+  <p><strong>Company ID:</strong> <span th:text="${user_info.companyId}"></span></p>
+</div>
+
+ -->
+<h2 class="mb-3">Task List</h2>
+
+<!-- Filter Section -->
+<div class="filter-section">
+  <div>
+    <label for="usernameFilter" class="filter-label">Users:</label>
+    <select id="usernameFilter" class="form-control filter-input" onchange="filterTasks()">
+      <option value="">All Users</option>
+      <!-- Populate the options dynamically using Thymeleaf -->
+      <th:block th:each="user : ${users}">
+        <option th:value="${user.username}" th:text="${user.username}"></option>
+      </th:block>
+    </select>
+  </div>
+  <div>
+    <label for="statusFilter" class="filter-label">Status:</label>
+    <select id="statusFilter" class="form-control filter-input" onchange="filterTasks()">
+      <option value="">All</option>
+      <option value="COMPLETE">Complete</option>
+      <option value="IN_PROGRESS">In Progress</option>
+      <option value="START">START</option>
+    </select>
+  </div>
+</div>
+
+<div class="mb-4">
+  <a th:href="@{/api/tasks/{userId}/new(userId=${user_info.id})}" th:if="${user_info.role == 'COMPANY_ADMIN' or user_info.role == 'SUPER_USER'}" class="btn btn-success">Create Task</a>
+</div>
+
+<table class="table table-bordered">
+  <thead class="thead-dark">
+  <tr>
+    <th>Task ID</th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>User ID</th>
+    <th>Username</th>
+    <th>Role</th>
+    <th>Status</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody id="taskTableBody">
+  <!-- Loop through tasks and display each task -->
+  <tr th:each="task : ${tasks_item}"
+      th:classappend="${task.status == 'COMPLETE' ? ' completed-task' : ''}"
+      class="task-row"
+      th:data-username="${task.username}"
+      th:data-status="${task.status}">
+    <td th:text="${task.id}"></td>
+    <td th:text="${task.title}"></td>
+    <td th:text="${task.description}"></td>
+    <td th:text="${task.userId}"></td>
+    <td th:text="${task.username}"></td>
+    <td th:text="${task.userRole}"></td>
+    <td th:text="${task.status}"></td>
+    <td>
+      <!-- Edit button, links to the edit page with the task id -->
+      <a th:href="@{/api/tasks/{userId}/edit/{id}(userId=${user_info.id}, id=${task.id})}" class="btn btn-warning btn-sm">Edit</a>
+
+      <!-- Delete button with confirmation -->
+      <form th:action="@{/api/tasks/{userId}/delete/{id}(userId=${user_info.id}, id=${task.id})}" method="post" style="display: inline;" th:if="${user_info.role == 'COMPANY_ADMIN' or task.userRole == 'SUPER_USER'}">
+        <input type="hidden" name="_method" value="delete"/>
+        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this task?');">Delete</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+  // Function to filter tasks based on username and status
+  function filterTasks() {
+    // Get filter values
+    const usernameFilter = document.getElementById('usernameFilter').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value;
+
+    // Get all task rows
+    const rows = document.querySelectorAll('.task-row');
+
+    // Loop through rows and apply filtering
+    rows.forEach(row => {
+      const username = row.getAttribute('data-username').toLowerCase();
+      const status = row.getAttribute('data-status');
+
+      // Check if row matches filters
+      const matchesUsername = !usernameFilter || username.includes(usernameFilter);
+      const matchesStatus = !statusFilter || status === statusFilter;
+
+      // Show or hide row based on filters
+      if (matchesUsername && matchesStatus) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
