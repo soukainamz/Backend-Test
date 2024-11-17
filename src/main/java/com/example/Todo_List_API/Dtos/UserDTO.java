@@ -11,7 +11,7 @@ public class UserDTO {
     private String role;
     private Long companyId;
 
-    // Constructor
+
     public UserDTO(Long id, String username, String role, Long companyId) {
         this.id = id;
         this.username = username;
@@ -19,7 +19,7 @@ public class UserDTO {
         this.companyId = companyId;
     }
 
-    // Default constructor (for frameworks like Spring)
+
     public UserDTO() {
     }
 }

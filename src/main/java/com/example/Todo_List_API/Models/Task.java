@@ -17,10 +17,10 @@ public class Task {
     private String title;
     private String description;
 
-    @Enumerated(EnumType.STRING)  // Store the enum as a string in the database
+    @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
-    @ManyToOne(cascade = CascadeType.ALL)  // Cascade all operations (persist, merge) to User
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 }

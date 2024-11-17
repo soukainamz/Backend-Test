@@ -43,7 +43,6 @@ public class TaskService {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Task not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
-
         Map<String, Object> result = new HashMap<>();
         result.put("task", task);
         result.put("user", user);
@@ -88,10 +87,6 @@ public class TaskService {
         newTask.setUser(user);
         return taskRepository.save(newTask);
     }
-
-
-
-
 
 
 }

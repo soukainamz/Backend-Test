@@ -55,21 +55,7 @@ public class TaskServiceTest {
         verify(taskRepository, times(1)).findByUserId(user.getId());
     }
 
-   /* @Test
-    public void testGetTasksForUser_companyAdmin() {
-        user.setRole("COMPANY_ADMIN");
-        List<User> companyUsers = Collections.singletonList(user);
-        when(userRepository.findByCompanyId(user.getCompany().getId())).thenReturn(companyUsers);
-        when(taskRepository.findByUserIdIn(Collections.singletonList(user.getId()))).thenReturn(Collections.singletonList(task));
 
-        List<Task> tasks = taskService.getTasksForUser(user);
-
-        assertNotNull(tasks);
-        assertEquals(1, tasks.size());
-        assertEquals("Test Task", tasks.get(0).getTitle());
-        verify(taskRepository, times(1)).findByUserIdIn(Collections.singletonList(user.getId()));
-    }
-*/
     @Test
     public void testGetTasksForUser_superUser() {
         user.setRole("SUPER_USER");

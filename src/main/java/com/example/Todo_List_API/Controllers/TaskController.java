@@ -28,25 +28,8 @@ public class TaskController {
     @Autowired
     private UserRepository userRepository;
 
-    // For simplicity, using a dummy user as current user.
- /*   private User getCurrentUser() {
-        return userRepository.findById(1L).orElseThrow(() -> new RuntimeException("User not found"));
-    }
 
-    @GetMapping
-    public List<Task> getAllTasks() {
-        return taskService.getTasksForUser(getCurrentUser());
-    }
 
-    @PostMapping
-    public Task createTask(@RequestBody Task task) {
-        return taskService.createTask(task, getCurrentUser());
-    }
-
-  */
-    private Long id_user_task;
-    private String user_role;
-    private User user_info;
     @GetMapping("/{userId}")
     public ModelAndView getTasksByUserId(@PathVariable Long userId) {
         // Fetch the user based on userId in the URL
@@ -80,15 +63,10 @@ public class TaskController {
 
         modelAndView.addObject("user_info", userDTO);
         modelAndView.addObject("users", allUsers);
-      //  model.addAttribute("users", userService.getAllUsers());
-        // modelAndView.addObject("account", user.getId());
-        //modelAndView.addObject("account_role", user.getRole());
-        user_info =user;
-        id_user_task=userId;
-        user_role= user.getRole();
         return modelAndView;
-       // return "tasks";
+
     }
+
 
 
     // Edit task (GET request to show the edit form)
@@ -121,6 +99,7 @@ public class TaskController {
 
 
 
+    // delete task
     @PostMapping("/{userId}/delete/{id}")
     public String deleteTask(@PathVariable Long userId, @PathVariable Long id) {
         taskService.deleteTask(id); // Call the delete service method
@@ -128,22 +107,16 @@ public class TaskController {
     }
 
 
-
-
-
-
-
-
+    // create task
     @GetMapping("/{userId}/new")
     public ModelAndView showCreateTaskForm(@PathVariable Long userId) {
-        // Fetch the current user
+
         User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Fetch all users for the dropdown
         List<User> allUsers = userRepository.findAll();
 
-        // Create and configure the ModelAndView
         ModelAndView modelAndView = new ModelAndView("create-task"); // The name of the HTML view
         modelAndView.addObject("user_info", currentUser); // Current user
         modelAndView.addObject("users", allUsers); // List of all users
@@ -153,49 +126,7 @@ public class TaskController {
     }
 
 
-
-    /*
-    @PostMapping("/{userId}/new")
-    public String createTask(@PathVariable Long userId,
-                             @RequestParam Long username, // This should be the user ID
-                             @RequestParam String title,
-                             @RequestParam String description,
-                             @RequestParam TaskStatus status) { // Use TaskStatus enum
-
-        // Log the received username for debugging
-        System.out.println("Received username: " + username);
-        System.out.println("Received username: " + title);
-        System.out.println("Received username: " + description);
-        System.out.println("Received username: " + status);
-
-        // Fetch the user by ID
-        User assignedUser = userRepository.findById(username)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + username));
-
-
-        // Log the fetched user ID
-        if (assignedUser != null && assignedUser.getId() != null) {
-            System.out.println("Assigned User ID: " + assignedUser.getId());
-        } else {
-            throw new IllegalArgumentException("Assigned user ID is null or user not found");
-        }
-
-
-        // Create a new task and associate it with the user
-        Task newTask = new Task();
-        newTask.setTitle(title);
-        newTask.setDescription(description);
-        newTask.setStatus(status);
-        newTask.setUser(assignedUser); // Set the user
-
-        // Save the task
-        taskService.saveTask(newTask);
-
-        return "redirect:/api/tasks/" + userId; // Redirect to a relevant page
-    }
-
-     */
-
+    // save created task
     @PostMapping("/{userId}/new")
     public String createTask(@PathVariable Long userId,
                            @RequestParam Long username, // This should be the user ID
@@ -205,11 +136,6 @@ public class TaskController {
          taskService.addTask(title, description, status, username);
         return "redirect:/api/tasks/" + userId;
     }
-
-
-
-
-
 
 
 }

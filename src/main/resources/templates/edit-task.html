@@ -23,11 +23,6 @@
     </div>
 
     <div class="form-group">
-        <label for="test">Test:</label>
-        <textarea id="test" name="test" class="form-control" th:text="${task.status}"></textarea>
-    </div>
-
-    <div class="form-group">
         <label for="status">Status:</label>
         <select id="status" name="status" class="form-control">
             <option value="START" th:selected="${task.status.toString() == 'START'}">Start</option>

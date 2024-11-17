@@ -12,9 +12,9 @@ public class TaskDTO {
     private Long userId;
     private String username;
     private String userRole;
-    private String status;  // New field to store the status
+    private String status;
 
-    // Constructors, getters, and setters
+
 
     public TaskDTO(Long id, String title, String description, Long userId, String username, String userRole, String status) {
         this.id = id;
@@ -23,6 +23,6 @@ public class TaskDTO {
         this.userId = userId;
         this.username = username;
         this.userRole = userRole;
-        this.status = status;  // Assign status to the DTO constructor
+        this.status = status;
     }
 }

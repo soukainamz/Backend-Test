@@ -15,7 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
-    private String role; // Can be "STANDARD", "COMPANY_ADMIN", "SUPER_USER"
+    private String role;
 
 
     @ManyToOne
